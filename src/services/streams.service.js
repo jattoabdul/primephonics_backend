@@ -82,6 +82,24 @@ class StreamService {
     }
   }
 
+  static async getAUserReport(id) {
+    try {
+      let userStreamReport = await database.Stream.findAll({
+        raw: true,
+        attributes: [
+          ['user_id', 'User'],
+          [database.sequelize.cast(database.sequelize.fn('sum', database.sequelize.col('seconds')), 'int'), 'Total Streamed']
+        ],
+        group: ['user_id'],
+        where: { user_id: Number(id) },
+      });
+
+      return userStreamReport[0];
+    } catch (error) {
+      throw error;
+    }
+  }
+
   static async deleteStream(id) {
     try {
       const StreamToDelete = await database.Stream.findOne({ where: { id: Number(id) } });
@@ -97,8 +115,6 @@ class StreamService {
       throw error;
     }
   }
-
-  // TODO: add getAllLabelReport and fetchSingleUserStream
 }
 
 export default StreamService;

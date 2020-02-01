@@ -95,8 +95,26 @@ class StreamController {
   }
 
   static async getAUserReport(req, res) {
-    util.setSuccess(200, 'No User Stream Report found');
-    return util.send(res);
+    const { id } = req.params;
+
+    if (!Number(id)) {
+      util.setError(400, 'Please input a valid numeric value');
+      return util.send(res);
+    }
+
+    try {
+      const theStream = await StreamService.getAUserReport(id);
+
+      if (!theStream) {
+        util.setError(404, `Cannot find User Stream Report with the id ${id}`);
+      } else {
+        util.setSuccess(200, 'Found User Stream Report', theStream);
+      }
+      return util.send(res);
+    } catch (error) {
+      util.setError(404, error);
+      return util.send(res);
+    }
   }
 
   static async deleteStream(req, res) {
