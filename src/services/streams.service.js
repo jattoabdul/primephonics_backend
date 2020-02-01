@@ -9,6 +9,42 @@ class StreamService {
     }
   }
 
+  static async getAllStreamsReport() {
+    try {
+      let reportStats = await database.Stream.findAll({
+        raw: true,
+        attributes: [
+          [database.sequelize.fn('sum', database.sequelize.col('fee')), 'totalRevenue'],
+          [database.sequelize.fn('sum', database.sequelize.col('seconds')), 'totalSecondsStreamed']
+        ]
+      });
+      reportStats = reportStats[0];
+
+      let labelReportStat = await database.Stream.findAll({
+        raw: true,
+        attributes: [
+          'track_label',
+          [database.sequelize.fn('sum', database.sequelize.col('seconds')), 'secondsStreamed']
+        ],
+        group: ['track_label'],
+      });
+
+      labelReportStat = labelReportStat.map((label) => {
+        label.percentageStreamed = (label.secondsStreamed/reportStats.totalSecondsStreamed) * 100;
+        const labelRevenue = (label.percentageStreamed / 100) * reportStats.totalRevenue;
+        label.revenueSplit = parseFloat((Math.round((labelRevenue + Number.EPSILON) * 100) / 100).toFixed(2))
+
+        return label;
+      });
+
+      labelReportStat = labelReportStat.reduce((accumulatedReport, currentReport) => ({ ...accumulatedReport, [currentReport.track_label]: currentReport.revenueSplit }), {})
+
+      return  labelReportStat;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   static async addStream(newStream) {
     try {
       return await database.Stream.create(newStream);

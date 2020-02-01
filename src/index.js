@@ -2,12 +2,15 @@ import 'dotenv/config';
 
 import express from 'express';
 import bodyParser from 'body-parser';
+import logger from 'morgan';
 import apiRoutes from './routes';
 import { serverResponse } from './utils/helpers';
 
 const port = process.env.PORT || '5400';
 const  environment = process.env.NODE_ENV || 'development';
 const app = express(); // setup express application
+
+app.use(logger('dev')); // add logging
 
 // server plugins & default middlewares
 app

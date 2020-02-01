@@ -19,6 +19,21 @@ class StreamController {
     }
   }
 
+  static async getAllStreamsReport(req, res) {
+    try {
+      const allStreamsReport = await StreamService.getAllStreamsReport();
+      if (allStreamsReport.constructor === Object && Object.entries(allStreamsReport).length > 0) {
+        util.setSuccess(200, 'Streams Report retrieved', allStreamsReport);
+      } else {
+        util.setSuccess(200, 'No Stream Report found');
+      }
+      return util.send(res);
+    } catch (error) {
+      util.setError(400, error);
+      return util.send(res);
+    }
+  }
+
   static async addStream(req, res) {
     if (!req.body.title || !req.body.price || !req.body.description) {
       util.setError(400, 'Please provide complete details');
@@ -77,6 +92,11 @@ class StreamController {
       util.setError(404, error);
       return util.send(res);
     }
+  }
+
+  static async getAUserReport(req, res) {
+    util.setSuccess(200, 'No User Stream Report found');
+    return util.send(res);
   }
 
   static async deleteStream(req, res) {

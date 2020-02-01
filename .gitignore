@@ -1,2 +1,5 @@
 node_modules
 .env
+resources/streaming.json
+resources/tracks.json
+resources/users.json

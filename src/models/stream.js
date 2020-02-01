@@ -29,11 +29,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID,
     },
     track_name: {
-      allowNull: false,
+      allowNull: true,
       type: DataTypes.STRING,
     },
     track_label: {
-      allowNull: false,
+      allowNull: true,
       type: DataTypes.STRING,
     },
     seconds: {

@@ -36,11 +36,11 @@ module.exports = {
         type: Sequelize.UUID,
       },
       track_name: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.STRING,
       },
       track_label: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.STRING,
       },
       seconds: {
