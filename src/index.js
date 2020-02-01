@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/*', (req, res) => {
-  serverResponse(res, 'invalid route. Try `/` or `/api/v1/`', 404, 'error');
+  serverResponse(res, 'invalid route. Try `/` or `/api/v1/*`', 404, 'error');
 });
 
 app.listen(port, () => {
