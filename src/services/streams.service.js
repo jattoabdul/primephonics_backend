@@ -11,23 +11,25 @@ class StreamService {
 
   static async getAllStreamsReport() {
     try {
-      let reportStats = await database.Stream.findAll({
-        raw: true,
-        attributes: [
-          [database.sequelize.fn('sum', database.sequelize.col('fee')), 'totalRevenue'],
-          [database.sequelize.fn('sum', database.sequelize.col('seconds')), 'totalSecondsStreamed']
-        ]
-      });
-      reportStats = reportStats[0];
+      let reportStats = {
+        totalRevenue: 0,
+        totalSecondsStreamed: 0
+      }
 
       let labelReportStat = await database.Stream.findAll({
         raw: true,
         attributes: [
           'track_label',
+          [database.sequelize.fn('sum', database.sequelize.col('fee')), 'labelRevenue'],
           [database.sequelize.fn('sum', database.sequelize.col('seconds')), 'secondsStreamed']
         ],
         group: ['track_label'],
       });
+
+      labelReportStat.forEach((stat) => {
+        reportStats.totalRevenue += parseFloat(stat.labelRevenue)
+        reportStats.totalSecondsStreamed += parseInt(stat.secondsStreamed)
+      })
 
       labelReportStat = labelReportStat.map((label) => {
         label.percentageStreamed = (label.secondsStreamed/reportStats.totalSecondsStreamed) * 100;
