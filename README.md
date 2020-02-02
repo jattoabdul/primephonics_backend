@@ -103,7 +103,7 @@ For more information, contact Abdulqahhar Aminujatto via <jattoade@gmail.com>
 ```json
 {
     "status": "error",
-    "message": "User Stream Report Not Found"
+    "error": "User ID Invalid"
 }
 ```
 
