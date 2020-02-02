@@ -1,0 +1,48 @@
+version: '3'
+services: 
+  primephonic:
+    container_name: primephonic
+    build:  .
+    volumes: 
+      - .:/app
+      - /app/node_modules
+    working_dir: /app
+    links: 
+      - primephonic_db
+    depends_on: 
+      - primephonic_db
+    ports: 
+      - "5500:5400"
+    networks:
+      - main
+    environment: 
+      - PORT=5400
+      - DB_NAME=postgres
+      - DB_USER=postgres
+      - DB_PASS=postgres
+      - DB_PORT=5432
+      - DB_HOST=primephonic_db
+      - SECRET_KEY=primephonics2020Test
+
+  primephonic_db:
+    image: postgres:12.1-alpine
+    container_name: primephonic_db
+    restart: always
+    ports:
+      - 54320:5432
+    expose:
+      - 5432
+    volumes:
+      - primephonic_postgres_data:/var/lib/postgresql/data
+    networks:
+      - main
+    environment:
+      POSTGRES_PASSWORD: postgres
+
+networks:
+  main:
+    driver: bridge
+
+volumes:
+  primephonic_postgres_data:
+    driver: local

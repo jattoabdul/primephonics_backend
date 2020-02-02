@@ -1,7 +1,15 @@
 # PrimePhonic Backend Assignment Solution
 > A simple app to generate a financial report based on streaming usage of users. As an output, this report should indicate how much money should be distributed to each label.
 
-## Local Build Setup
+## Method 1: Docker Build and Run Setup
+
+To Install all system requirements and run app:
+
+- Install Docker
+- ```$docker-compose up --build```
+- Run app on port `5500` e.g. [`http://localhost:5500`]
+
+## Method 2: Local Build Setup
 
 To Install all system requirements:
 
@@ -41,7 +49,7 @@ Serve with hot reload at localhost:5400:
 
 - ```$ yarn run dev```
 
-## Production Build Setup
+## Method 3: Production Build Setup
 
 Build for production and launch server:
 
@@ -51,8 +59,6 @@ Build for production and launch server:
 ## Environment & Setup info
 
 - API is built on top of the [Express framework](https://expressjs.com/)
-
-For more information, contact Abdulqahhar Aminujatto via <jattoade@gmail.com>
 
 ## API Documentation
 
@@ -90,7 +96,6 @@ For more information, contact Abdulqahhar Aminujatto via <jattoade@gmail.com>
 
 ```json
 {
-    "status": "success",
     "message": "Found User Stream Report",
     "data": {
         ...
@@ -102,12 +107,20 @@ For more information, contact Abdulqahhar Aminujatto via <jattoade@gmail.com>
 
 ```json
 {
-    "status": "error",
     "error": "User ID Invalid"
 }
 ```
 
 ## Notes
 
->- Each response come with their status code
->- More Notes Coming
+### Assumptions
+
+>- Application will be run in a private VPC  or behind an API gateaway that handles authentication.
+>- That the metadata API will have a 99.99% uptime. In case of failure/downtime, I have the options to implement an exponetial backoff or to schedule jobs that run and retries to fetch data.
+
+### Possible Improvements
+
+>- We can use background jobs to run our db sync script, at way we always have updated stream data.
+>- Caching Result to avoid DB Hits every time ,especially when things haven't changed, we can return data from a Redis Cache.
+
+For more information, contact Abdulqahhar Aminujatto via <jattoade@gmail.com>

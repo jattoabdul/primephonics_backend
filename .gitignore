@@ -3,3 +3,4 @@ node_modules
 resources/streaming.json
 resources/tracks.json
 resources/users.json
+primephonic_postgres_data
